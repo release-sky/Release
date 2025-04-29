@@ -1,0 +1,25 @@
+local player = game.Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local hrp = character:WaitForChild("HumanoidRootPart")
+
+-- Save original position
+local originalCFrame = hrp.CFrame
+
+-- Go through each scrap and teleport to it
+for _, scrap in pairs(workspace.scraps:GetChildren()) do
+    local material = scrap:FindFirstChild("defaultMaterial10")
+    if material then
+        local prompt = material:FindFirstChild("ProximityPrompt")
+        if prompt then
+            -- Teleport to scrap, slightly above to avoid getting stuck
+            hrp.CFrame = material.CFrame + Vector3.new(0, 3, 0)
+
+            wait(0.2) -- allow time for physics
+            fireproximityprompt(prompt)
+            wait(0.2) 
+        end
+    end
+end
+
+-- Return to original position
+hrp.CFrame = originalCFrame
